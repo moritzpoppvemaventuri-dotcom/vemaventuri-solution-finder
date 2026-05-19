@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vemaventuri Solution Finder</title>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --vm-black:   #0a0a0a;
+  --vm-black2:  #111111;
+  --vm-black3:  #1a1a1a;
+  --vm-yellow:  #F5C400;
+  --vm-yellow2: #FFD000;
+  --vm-white:   #ffffff;
+  --vm-gray1:   #f5f5f5;
+  --vm-gray2:   #e8e8e8;
+  --vm-gray3:   #b0b0b0;
+  --vm-gray4:   #6b6b6b;
+  --vm-border:  #e2e2e2;
+}
+
+body { margin: 0; background: #fff; }
+
+#sf {
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  color: var(--vm-black);
+  min-height: 560px;
+  position: relative;
+}
+
+.sf-inner {
+  padding: 36px 36px 32px;
+}
+
+/* ── HEADER ── */
+.sf-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.sf-logo-area { display: flex; flex-direction: column; gap: 2px; }
+
+.sf-logo-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sf-diamond {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sf-brand-name {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vm-black);
+}
+
+.sf-brand-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--vm-gray4);
+  letter-spacing: 0.04em;
+  padding-left: 28px;
+}
+
+.sf-step-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vm-black);
+  background: var(--vm-yellow);
+  border-radius: 2px;
+  padding: 4px 10px;
+}
+
+/* ── PROGRESS ── */
+.sf-progress-wrap {
+  margin-bottom: 32px;
+}
+
+.sf-progress-track {
+  height: 3px;
+  background: var(--vm-gray2);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.sf-progress-fill {
+  height: 100%;
+  background: var(--vm-yellow);
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.sf-progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.sf-progress-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--vm-gray4);
+  letter-spacing: 0.02em;
+}
+
+/* ── QUESTION ── */
+.sf-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vm-gray4);
+  margin-bottom: 10px;
+}
+
+.sf-question {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--vm-black);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.sf-question-sub {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--vm-gray4);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ── OPTIONS ── */
+.sf-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.sf-options.cols3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.sf-option {
+  background: #fff;
+  border: 1.5px solid var(--vm-border);
+  border-radius: 4px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  position: relative;
+}
+
+.sf-option:hover {
+  border-color: var(--vm-black);
+}
+
+.sf-option.selected {
+  border-color: var(--vm-black);
+  background: var(--vm-black);
+}
+
+.sf-option.selected .sf-opt-title { color: var(--vm-white); }
+.sf-option.selected .sf-opt-desc  { color: rgba(255,255,255,0.55); }
+.sf-option.selected .sf-opt-icon  { filter: none; }
+
+.sf-opt-check {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--vm-border);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.sf-option.selected .sf-opt-check {
+  background: var(--vm-yellow);
+  border-color: var(--vm-yellow);
+}
+
+.sf-opt-check-mark {
+  width: 10px; height: 10px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.sf-option.selected .sf-opt-check-mark { opacity: 1; }
+
+.sf-opt-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.sf-opt-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vm-black);
+  margin-bottom: 5px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.sf-opt-desc {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--vm-gray4);
+  line-height: 1.5;
+}
+
+/* ── NAV ── */
+.sf-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sf-btn-back {
+  background: #fff;
+  border: 1.5px solid var(--vm-border);
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vm-gray4);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sf-btn-back:hover { border-color: var(--vm-black); color: var(--vm-black); }
+
+.sf-btn-next {
+  flex: 1;
+  background: var(--vm-black);
+  border: none;
+  border-radius: 4px;
+  padding: 13px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vm-white);
+  cursor: pointer;
+  transition: all 0.15s;
+  opacity: 0.25;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sf-btn-next.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sf-btn-next.active:hover {
+  background: var(--vm-yellow);
+  color: var(--vm-black);
+}
+
+/* ── ANIMATION ── */
+.sf-screen { animation: sfIn 0.25s ease forwards; }
+@keyframes sfIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESULT ── */
+.sf-result-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--vm-yellow);
+  border-radius: 2px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vm-black);
+  margin-bottom: 14px;
+}
+
+.sf-result-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--vm-black);
+  margin-bottom: 6px;
+  line-height: 1.15;
+}
+
+.sf-result-sub {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--vm-gray4);
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.sf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.sf-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vm-gray4);
+  background: var(--vm-gray1);
+  border: 1px solid var(--vm-border);
+  border-radius: 2px;
+  padding: 3px 8px;
+}
+
+.sf-tag.hl {
+  color: var(--vm-black);
+  background: var(--vm-yellow);
+  border-color: var(--vm-yellow);
+}
+
+/* Products */
+.sf-products { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+.sf-product {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--vm-border);
+  border-radius: 4px;
+  background: #fff;
+  text-decoration: none;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.sf-product:hover { border-color: var(--vm-black); }
+
+.sf-product.primary {
+  border-color: var(--vm-black);
+  background: var(--vm-black);
+}
+
+.sf-badge {
+  width: 46px; height: 46px;
+  border-radius: 4px;
+  background: var(--vm-gray1);
+  border: 1px solid var(--vm-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--vm-black);
+}
+
+.sf-product.primary .sf-badge {
+  background: var(--vm-yellow);
+  border-color: var(--vm-yellow);
+  color: var(--vm-black);
+}
+
+.sf-prod-info { flex: 1; }
+
+.sf-prod-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.sf-prod-name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--vm-black);
+}
+
+.sf-product.primary .sf-prod-name { color: var(--vm-white); }
+
+.sf-rec-pill {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vm-black);
+  background: var(--vm-yellow);
+  border-radius: 2px;
+  padding: 2px 6px;
+}
+
+.sf-prod-tagline {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--vm-gray4);
+}
+
+.sf-product.primary .sf-prod-tagline { color: rgba(255,255,255,0.5); }
+
+.sf-prod-arrow {
+  font-size: 16px;
+  color: var(--vm-gray3);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.sf-product:hover .sf-prod-arrow { color: var(--vm-black); transform: translateX(2px); }
+.sf-product.primary .sf-prod-arrow { color: rgba(255,255,255,0.4); }
+.sf-product.primary:hover .sf-prod-arrow { color: var(--vm-white); }
+
+/* CTA */
+.sf-divider { height: 1px; background: var(--vm-border); margin: 16px 0; }
+
+.sf-cta { display: flex; gap: 10px; }
+
+.sf-btn-demo {
+  flex: 1;
+  background: var(--vm-yellow);
+  border: none;
+  border-radius: 4px;
+  padding: 13px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vm-black);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sf-btn-demo:hover { background: var(--vm-yellow2); }
+
+.sf-btn-restart {
+  background: #fff;
+  border: 1.5px solid var(--vm-border);
+  border-radius: 4px;
+  padding: 13px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vm-gray4);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sf-btn-restart:hover { border-color: var(--vm-black); color: var(--vm-black); }
+  </style>
+</head>
+<body>
+
+<div id="sf">
+  <div class="sf-inner" id="sf-content"></div>
+</div>
+
+<script>
+var steps = [
+  {
+    id: 'pain',
+    step: 'Step 1 of 3', pct: 8,
+    eyebrow: 'Find your solution',
+    question: 'What is your biggest challenge on site?',
+    sub: 'Select the area that costs you the most time and resources.',
+    multi: false,
+    cols: 2,
+    options: [
+      { id: 'festigkeit',  icon: '🏗️', title: 'Strength & Curing',    desc: 'Uncertain compressive strength, slow cycles, lab results don\'t match in-situ reality' },
+      { id: 'schalung',    icon: '⚠️', title: 'Formwork Safety',       desc: 'Pressure spikes, blowout risk, tall walls or SCC' },
+      { id: 'qualitaet',   icon: '🔍', title: 'Concrete Quality',      desc: 'Honeycombing, voids, fair-faced concrete, poor surface' },
+      { id: 'frischbeton', icon: '💧', title: 'Fresh Concrete QC',     desc: 'Unclear water content, w/c ratio fluctuates, inconsistent deliveries' }
+    ]
+  },
+  {
+    id: 'context',
+    step: 'Step 2 of 3', pct: 50,
+    eyebrow: 'Project context',
+    question: 'Which conditions apply to your project?',
+    sub: 'Multiple answers possible — select all that apply.',
+    multi: true,
+    cols: 3,
+    options: [
+      { id: 'winter',     icon: '❄️', title: 'Extreme Temperatures', desc: 'Winter concreting or summer heat' },
+      { id: 'highwall',   icon: '🏛️', title: 'High Walls & Columns', desc: 'Over 3m, bridges, tunnels' },
+      { id: 'sichtbeton', icon: '✨', title: 'Architectural Concrete', desc: 'High surface quality, fair-faced' },
+      { id: 'scc',        icon: '🌊', title: 'Self-Compacting (SCC)', desc: 'Special concrete mixes' },
+      { id: 'schnell',    icon: '⚡', title: 'Fast Cycle Times',      desc: 'Early striking, post-tensioning' },
+      { id: 'infra',      icon: '🔧', title: 'Infrastructure',        desc: 'Tunnels, complex geometries' }
+    ]
+  },
+  {
+    id: 'goal',
+    step: 'Step 3 of 3', pct: 80,
+    eyebrow: 'Your priority',
+    question: 'What is your primary goal?',
+    sub: 'This helps us prioritize the best solution for you.',
+    multi: false,
+    cols: 2,
+    options: [
+      { id: 'sicherheit', icon: '🛡️', title: 'Increase Safety',    desc: 'Minimize risk, prevent accidents, maintain compliance' },
+      { id: 'speed',      icon: '🚀', title: 'Build Faster',        desc: 'Shorter cycles, earlier striking, less waiting time' },
+      { id: 'kosten',     icon: '💰', title: 'Reduce Costs',        desc: 'Less rework, fewer lab tests, less waste' },
+      { id: 'qualitaet2', icon: '🏆', title: 'Ensure Quality',      desc: 'Documentation, standards, client satisfaction' }
+    ]
+  }
+];
+
+var products = {
+  TEMO:     { name: 'TEMO',      tag: 'TEMO', tagline: 'Temperature & Maturity Monitoring',            url: 'https://vemaventuri.io/temo-concrete-temperature-and-maturity-monitoring' },
+  TEMOLINK: { name: 'TEMO Link', tag: 'T.LK', tagline: 'Wireless Temperature & Maturity Monitoring',   url: 'https://vemaventuri.io/temo-link-concrete-temperature-and-maturity-monitoring' },
+  LINK:     { name: 'LINK',      tag: 'LINK', tagline: 'Pressure, Temperature & Maturity — all-in-one',url: 'https://vemaventuri.io/link-concrete-pressure-temperature-and-maturity-monitoring' },
+  PREMO:    { name: 'PREMO',     tag: 'PRMO', tagline: 'Real-Time Formwork Pressure Monitoring',        url: 'https://vemaventuri.io/premo-concrete-pressure-monitoring' },
+  PHONO:    { name: 'PHONO',     tag: 'PHNO', tagline: 'Concrete Detection & Compaction Monitoring',    url: 'https://vemaventuri.io/phono-concrete-detection-and-compaction-monitoring' },
+  SONO:     { name: 'SONO Hub',  tag: 'SONO', tagline: 'w/c Ratio Determination at Point of Discharge', url: 'https://vemaventuri.io/sono-water-content-determination-of-fresh-concrete' }
+};
+
+function recommend(a) {
+  var pain = a.pain, ctx = a.context || [], goal = a.goal;
+  var pri = [], sec = [];
+  if (pain === 'festigkeit') {
+    if (ctx.indexOf('schnell') > -1 || goal === 'speed') { pri = ['LINK','TEMOLINK']; sec = ['TEMO']; }
+    else if (ctx.indexOf('winter') > -1)                 { pri = ['TEMOLINK','LINK']; sec = ['TEMO']; }
+    else                                                  { pri = ['TEMOLINK','TEMO']; sec = ['LINK']; }
+  } else if (pain === 'schalung') {
+    if (ctx.indexOf('scc') > -1 || ctx.indexOf('highwall') > -1) { pri = ['LINK','PREMO']; }
+    else { pri = ['PREMO']; sec = ['LINK']; }
+  } else if (pain === 'qualitaet') {
+    if (ctx.indexOf('sichtbeton') > -1) { pri = ['PHONO']; sec = ['LINK']; }
+    else { pri = ['PHONO']; sec = ['TEMO']; }
+  } else if (pain === 'frischbeton') {
+    pri = ['SONO']; sec = ['PHONO'];
+  }
+  if (ctx.indexOf('infra') > -1 && pri.indexOf('LINK') === -1 && sec.indexOf('LINK') === -1) sec.unshift('LINK');
+  return { pri: pri, sec: sec };
+}
+
+var currentStep = 0;
+var answers = {};
+var selections = {};
+
+function getSel(id) { return selections[id] || []; }
+
+function render() {
+  var c = document.getElementById('sf-content');
+  if (currentStep < steps.length) {
+    renderQ(c, steps[currentStep]);
+  } else {
+    renderResult(c);
+  }
+}
+
+function renderQ(c, s) {
+  var selected = getSel(s.id);
+  var hasSelection = selected.length > 0;
+  var colClass = s.cols === 3 ? 'sf-options cols3' : 'sf-options';
+
+  var optionsHTML = '';
+  for (var i = 0; i < s.options.length; i++) {
+    var o = s.options[i];
+    var isSelected = selected.indexOf(o.id) > -1;
+    optionsHTML += '<button class="sf-option' + (isSelected ? ' selected' : '') + '" onclick="pick(\'' + s.id + '\',\'' + o.id + '\',' + s.multi + ')">' +
+      '<div class="sf-opt-check">' +
+        '<svg class="sf-opt-check-mark" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</div>' +
+      '<span class="sf-opt-icon">' + o.icon + '</span>' +
+      '<div class="sf-opt-title">' + o.title + '</div>' +
+      '<div class="sf-opt-desc">' + o.desc + '</div>' +
+    '</button>';
+  }
+
+  var backBtn = currentStep > 0 ? '<button class="sf-btn-back" onclick="goBack()">← Back</button>' : '';
+  var nextLabel = currentStep < steps.length - 1 ? 'Continue →' : 'Show my solutions →';
+
+  c.innerHTML =
+    '<div class="sf-screen">' +
+      '<div class="sf-header">' +
+        '<div class="sf-logo-area">' +
+          '<div class="sf-logo-wordmark">' +
+            '<svg class="sf-diamond" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,12 12,22 2,12" fill="#0a0a0a"/><polygon points="12,6 18,12 12,18 6,12" fill="#F5C400"/></svg>' +
+            '<span class="sf-brand-name">Vemaventuri</span>' +
+          '</div>' +
+          '<div class="sf-brand-sub">Solution Finder · A PERI Company</div>' +
+        '</div>' +
+        '<div class="sf-step-badge">' + s.step + '</div>' +
+      '</div>' +
+      '<div class="sf-progress-wrap">' +
+        '<div class="sf-progress-track"><div class="sf-progress-fill" style="width:' + s.pct + '%"></div></div>' +
+        '<div class="sf-progress-label">' +
+          '<span class="sf-progress-text">Finding your solution</span>' +
+          '<span class="sf-progress-text">' + s.pct + '%</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sf-eyebrow">' + s.eyebrow + '</div>' +
+      '<div class="sf-question">' + s.question + '</div>' +
+      '<div class="sf-question-sub">' + s.sub + '</div>' +
+      '<div class="' + colClass + '">' + optionsHTML + '</div>' +
+      '<div class="sf-nav">' +
+        backBtn +
+        '<button class="sf-btn-next' + (hasSelection ? ' active' : '') + '" onclick="goNext()">' + nextLabel + '</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function renderResult(c) {
+  var recs = recommend(answers);
+  var painLabel = '';
+  for (var i = 0; i < steps[0].options.length; i++) {
+    if (steps[0].options[i].id === answers.pain) { painLabel = steps[0].options[i].title; break; }
+  }
+  var ctxLabels = [];
+  var ctx = answers.context || [];
+  for (var j = 0; j < steps[1].options.length; j++) {
+    if (ctx.indexOf(steps[1].options[j].id) > -1) ctxLabels.push(steps[1].options[j].title);
+  }
+  var goalLabel = '';
+  for (var k = 0; k < steps[2].options.length; k++) {
+    if (steps[2].options[k].id === answers.goal) { goalLabel = steps[2].options[k].title; break; }
+  }
+
+  var allProds = [];
+  for (var pi = 0; pi < recs.pri.length; pi++) allProds.push({ key: recs.pri[pi], primary: true });
+  for (var si = 0; si < recs.sec.length; si++) allProds.push({ key: recs.sec[si], primary: false });
+
+  var tagsHTML = '';
+  if (painLabel) tagsHTML += '<span class="sf-tag hl">' + painLabel + '</span>';
+  for (var ti = 0; ti < ctxLabels.length; ti++) tagsHTML += '<span class="sf-tag">' + ctxLabels[ti] + '</span>';
+  if (goalLabel) tagsHTML += '<span class="sf-tag">' + goalLabel + '</span>';
+
+  var prodsHTML = '';
+  for (var ai = 0; ai < allProds.length; ai++) {
+    var pd = products[allProds[ai].key];
+    var isPri = allProds[ai].primary;
+    prodsHTML +=
+      '<a class="sf-product' + (isPri ? ' primary' : '') + '" href="' + pd.url + '" target="_blank">' +
+        '<div class="sf-badge">' + pd.tag + '</div>' +
+        '<div class="sf-prod-info">' +
+          '<div class="sf-prod-header">' +
+            '<div class="sf-prod-name">' + pd.name + '</div>' +
+            (isPri ? '<span class="sf-rec-pill">Recommended</span>' : '') +
+          '</div>' +
+          '<div class="sf-prod-tagline">' + pd.tagline + '</div>' +
+        '</div>' +
+        '<div class="sf-prod-arrow">→</div>' +
+      '</a>';
+  }
+
+  c.innerHTML =
+    '<div class="sf-screen">' +
+      '<div class="sf-header">' +
+        '<div class="sf-logo-area">' +
+          '<div class="sf-logo-wordmark">' +
+            '<svg class="sf-diamond" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,12 12,22 2,12" fill="#0a0a0a"/><polygon points="12,6 18,12 12,18 6,12" fill="#F5C400"/></svg>' +
+            '<span class="sf-brand-name">Vemaventuri</span>' +
+          '</div>' +
+          '<div class="sf-brand-sub">Solution Finder · A PERI Company</div>' +
+        '</div>' +
+        '<div class="sf-step-badge">✓ Done</div>' +
+      '</div>' +
+      '<div class="sf-progress-wrap">' +
+        '<div class="sf-progress-track"><div class="sf-progress-fill" style="width:100%"></div></div>' +
+        '<div class="sf-progress-label">' +
+          '<span class="sf-progress-text">Solution found</span>' +
+          '<span class="sf-progress-text">100%</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sf-result-kicker">✓ Your recommendation</div>' +
+      '<div class="sf-result-title">Matching Solutions for Your Project</div>' +
+      '<div class="sf-result-sub">Based on your answers, we recommend the following sensor solutions. Click any product to learn more.</div>' +
+      '<div class="sf-tags">' + tagsHTML + '</div>' +
+      '<div class="sf-products">' + prodsHTML + '</div>' +
+      '<div class="sf-divider"></div>' +
+      '<div class="sf-cta">' +
+        '<button class="sf-btn-demo" onclick="window.open(\'https://vemaventuri.io/schedule-a-demo\',\'_blank\')">Book a Free Demo</button>' +
+        '<button class="sf-btn-restart" onclick="restart()">↺ Start over</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function pick(stepId, optId, multi) {
+  if (!selections[stepId]) selections[stepId] = [];
+  var idx = selections[stepId].indexOf(optId);
+  if (multi) {
+    if (idx > -1) selections[stepId].splice(idx, 1);
+    else selections[stepId].push(optId);
+  } else {
+    selections[stepId] = [optId];
+  }
+  render();
+}
+
+function goNext() {
+  var s = steps[currentStep];
+  var sel = getSel(s.id);
+  if (!sel.length) return;
+  answers[s.id] = s.multi ? sel : sel[0];
+  currentStep++;
+  render();
+}
+
+function goBack() {
+  if (currentStep > 0) { currentStep--; render(); }
+}
+
+function restart() {
+  currentStep = 0; answers = {}; selections = {};
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
