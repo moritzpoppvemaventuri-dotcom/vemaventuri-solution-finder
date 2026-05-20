@@ -1,745 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vemaventuri Solution Finder</title>
-  <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --vm-black:   #0a0a0a;
-  --vm-black2:  #111111;
-  --vm-black3:  #1a1a1a;
-  --vm-yellow:  #F5C400;
-  --vm-yellow2: #FFD000;
-  --vm-white:   #ffffff;
-  --vm-gray1:   #f5f5f5;
-  --vm-gray2:   #e8e8e8;
-  --vm-gray3:   #b0b0b0;
-  --vm-gray4:   #6b6b6b;
-  --vm-border:  #e2e2e2;
-}
-
-body { margin: 0; background: #fff; }
-
-#sf {
-  font-family: 'Inter', sans-serif;
-  background: #fff;
-  color: var(--vm-black);
-  min-height: 560px;
-  position: relative;
-}
-
-.sf-inner {
-  padding: 36px 36px 32px;
-}
-
-/* ── HEADER ── */
-.sf-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 32px;
-}
-
-.sf-logo-area { display: flex; flex-direction: column; gap: 2px; }
-
-.sf-logo-wordmark {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sf-diamond {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.sf-brand-name {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vm-black);
-}
-
-.sf-brand-sub {
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--vm-gray4);
-  letter-spacing: 0.04em;
-  padding-left: 28px;
-}
-
-.sf-step-badge {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vm-black);
-  background: var(--vm-yellow);
-  border-radius: 2px;
-  padding: 4px 10px;
-}
-
-/* ── PROGRESS ── */
-.sf-progress-wrap {
-  margin-bottom: 32px;
-}
-
-.sf-progress-track {
-  height: 3px;
-  background: var(--vm-gray2);
-  border-radius: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.sf-progress-fill {
-  height: 100%;
-  background: var(--vm-yellow);
-  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-}
-
-.sf-progress-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.sf-progress-text {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--vm-gray4);
-  letter-spacing: 0.02em;
-}
-
-/* ── QUESTION ── */
-.sf-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--vm-gray4);
-  margin-bottom: 10px;
-}
-
-.sf-question {
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1.15;
-  color: var(--vm-black);
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-}
-
-.sf-question-sub {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--vm-gray4);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-/* ── OPTIONS ── */
-.sf-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.sf-options.cols3 {
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.sf-option {
-  background: #fff;
-  border: 1.5px solid var(--vm-border);
-  border-radius: 4px;
-  padding: 16px;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  text-align: left;
-  position: relative;
-}
-
-.sf-option:hover {
-  border-color: var(--vm-black);
-}
-
-.sf-option.selected {
-  border-color: var(--vm-black);
-  background: var(--vm-black);
-}
-
-.sf-option.selected .sf-opt-title { color: var(--vm-white); }
-.sf-option.selected .sf-opt-desc  { color: rgba(255,255,255,0.55); }
-.sf-option.selected .sf-opt-icon  { filter: none; }
-
-.sf-opt-check {
-  position: absolute;
-  top: 12px; right: 12px;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  border: 1.5px solid var(--vm-border);
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-
-.sf-option.selected .sf-opt-check {
-  background: var(--vm-yellow);
-  border-color: var(--vm-yellow);
-}
-
-.sf-opt-check-mark {
-  width: 10px; height: 10px;
-  opacity: 0;
-  transition: opacity 0.1s;
-}
-
-.sf-option.selected .sf-opt-check-mark { opacity: 1; }
-
-.sf-opt-icon {
-  font-size: 24px;
-  margin-bottom: 12px;
-  display: block;
-}
-
-.sf-opt-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--vm-black);
-  margin-bottom: 5px;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-
-.sf-opt-desc {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--vm-gray4);
-  line-height: 1.5;
-}
-
-/* ── NAV ── */
-.sf-nav {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.sf-btn-back {
-  background: #fff;
-  border: 1.5px solid var(--vm-border);
-  border-radius: 4px;
-  padding: 12px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--vm-gray4);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.sf-btn-back:hover { border-color: var(--vm-black); color: var(--vm-black); }
-
-.sf-btn-next {
-  flex: 1;
-  background: var(--vm-black);
-  border: none;
-  border-radius: 4px;
-  padding: 13px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vm-white);
-  cursor: pointer;
-  transition: all 0.15s;
-  opacity: 0.25;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.sf-btn-next.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.sf-btn-next.active:hover {
-  background: var(--vm-yellow);
-  color: var(--vm-black);
-}
-
-/* ── ANIMATION ── */
-.sf-screen { animation: sfIn 0.25s ease forwards; }
-@keyframes sfIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── RESULT ── */
-.sf-result-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--vm-yellow);
-  border-radius: 2px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--vm-black);
-  margin-bottom: 14px;
-}
-
-.sf-result-title {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--vm-black);
-  margin-bottom: 6px;
-  line-height: 1.15;
-}
-
-.sf-result-sub {
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--vm-gray4);
-  margin-bottom: 18px;
-  line-height: 1.6;
-}
-
-.sf-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 20px;
-}
-
-.sf-tag {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vm-gray4);
-  background: var(--vm-gray1);
-  border: 1px solid var(--vm-border);
-  border-radius: 2px;
-  padding: 3px 8px;
-}
-
-.sf-tag.hl {
-  color: var(--vm-black);
-  background: var(--vm-yellow);
-  border-color: var(--vm-yellow);
-}
-
-/* Products */
-.sf-products { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-
-.sf-product {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border: 1.5px solid var(--vm-border);
-  border-radius: 4px;
-  background: #fff;
-  text-decoration: none;
-  transition: all 0.15s;
-  cursor: pointer;
-}
-
-.sf-product:hover { border-color: var(--vm-black); }
-
-.sf-product.primary {
-  border-color: var(--vm-black);
-  background: var(--vm-black);
-}
-
-.sf-badge {
-  width: 46px; height: 46px;
-  border-radius: 4px;
-  background: var(--vm-gray1);
-  border: 1px solid var(--vm-border);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: var(--vm-black);
-}
-
-.sf-product.primary .sf-badge {
-  background: var(--vm-yellow);
-  border-color: var(--vm-yellow);
-  color: var(--vm-black);
-}
-
-.sf-prod-info { flex: 1; }
-
-.sf-prod-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 3px;
-}
-
-.sf-prod-name {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--vm-black);
-}
-
-.sf-product.primary .sf-prod-name { color: var(--vm-white); }
-
-.sf-rec-pill {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--vm-black);
-  background: var(--vm-yellow);
-  border-radius: 2px;
-  padding: 2px 6px;
-}
-
-.sf-prod-tagline {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--vm-gray4);
-}
-
-.sf-product.primary .sf-prod-tagline { color: rgba(255,255,255,0.5); }
-
-.sf-prod-arrow {
-  font-size: 16px;
-  color: var(--vm-gray3);
-  transition: all 0.15s;
-  flex-shrink: 0;
-}
-
-.sf-product:hover .sf-prod-arrow { color: var(--vm-black); transform: translateX(2px); }
-.sf-product.primary .sf-prod-arrow { color: rgba(255,255,255,0.4); }
-.sf-product.primary:hover .sf-prod-arrow { color: var(--vm-white); }
-
-/* CTA */
-.sf-divider { height: 1px; background: var(--vm-border); margin: 16px 0; }
-
-.sf-cta { display: flex; gap: 10px; }
-
-.sf-btn-demo {
-  flex: 1;
-  background: var(--vm-yellow);
-  border: none;
-  border-radius: 4px;
-  padding: 13px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--vm-black);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.sf-btn-demo:hover { background: var(--vm-yellow2); }
-
-.sf-btn-restart {
-  background: #fff;
-  border: 1.5px solid var(--vm-border);
-  border-radius: 4px;
-  padding: 13px 18px;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--vm-gray4);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.sf-btn-restart:hover { border-color: var(--vm-black); color: var(--vm-black); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solution Finder – Vemaventuri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #ffc300;
+    --gold-pale: rgba(255,195,0,0.07);
+    --gold-border: rgba(255,195,0,0.28);
+    --dark: #0f0f13;
+    --dark-2: #1a1a22;
+    --text: #111112;
+    --text-2: #6b6b72;
+    --text-3: #9a9aa4;
+    --border: rgba(0,0,0,0.1);
+    --border-2: rgba(0,0,0,0.16);
+    --surface: #ffffff;
+    --surface-2: #f7f7f8;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html, body {
+    background: #f4f4f6;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav {
+    background: var(--dark);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .nav-logo { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: .02em; }
+
+  .hero {
+    background: var(--dark);
+    padding: 2.5rem 2rem 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .hero-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .hero-title { font-size: 28px; font-weight: 600; color: #fff; line-height: 1.25; max-width: 480px; }
+  .hero-sub { font-size: 14px; color: rgba(255,255,255,0.45); margin-top: 6px; max-width: 440px; }
+
+  .main { max-width: 760px; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 4rem; flex: 1; }
+
+  .progress { display: flex; align-items: center; margin-bottom: 2rem; }
+  .p-step { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--text-3); }
+  .p-step.active { color: var(--text); }
+  .p-step.done { color: var(--text-2); }
+  .p-num {
+    width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    background: #e4e4e8; color: var(--text-3); flex-shrink: 0;
+  }
+  .p-step.active .p-num { background: var(--dark); color: #fff; }
+  .p-step.done .p-num { background: #16a34a; color: #fff; }
+  .p-line { flex: 1; max-width: 40px; height: 1px; background: #d8d8de; margin: 0 6px; }
+
+  .sect-q { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .sect-hint { font-size: 12px; color: var(--text-3); margin-bottom: 16px; display: flex; align-items: center; gap: 5px; }
+  .sect-hint i { color: var(--gold); }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid1 { display: grid; grid-template-columns: 1fr; gap: 6px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: .9rem 1.1rem; cursor: pointer; transition: border-color .15s, background .15s, transform .12s;
+    text-align: left; position: relative; width: 100%;
+  }
+  .card:hover { border-color: var(--border-2); transform: translateY(-1px); }
+  .card.sel { border-color: var(--gold); background: var(--gold-pale); }
+  .check-ring {
+    position: absolute; top: 10px; right: 10px; width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid var(--border-2); display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: transparent; background: transparent; transition: all .15s;
+  }
+  .card.sel .check-ring { border-color: var(--gold); background: var(--gold); color: #000; }
+  .card-icon { font-size: 20px; color: var(--text-3); margin-bottom: 8px; }
+  .card.sel .card-icon { color: var(--gold); }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; padding-right: 22px; line-height: 1.3; }
+  .card-sub { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+
+  .cat-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--text-2); margin-bottom: 8px; margin-top: 6px; display: flex; align-items: center; gap: 5px;
+  }
+
+  .back-btn {
+    background: none; border: none; font-size: 12px; font-family: 'Inter', sans-serif;
+    color: var(--text-2); cursor: pointer; padding: 0; display: flex; align-items: center;
+    gap: 4px; margin-bottom: 1.5rem; transition: color .12s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  .cta { margin-top: 18px; display: flex; align-items: center; gap: 12px; }
+  .btn-primary {
+    background: var(--dark); color: #fff; border: none; padding: 10px 22px;
+    border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+    font-family: 'Inter', sans-serif; cursor: pointer; display: flex; align-items: center;
+    gap: 6px; transition: opacity .15s;
+  }
+  .btn-primary:disabled { opacity: .3; cursor: default; }
+  .btn-primary:not(:disabled):hover { opacity: .82; }
+  .cta-count { font-size: 12px; color: var(--text-3); }
+
+  .results { display: flex; flex-direction: column; gap: 12px; }
+  .res-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .res-head {
+    background: var(--dark); padding: 1.1rem 1.4rem;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  }
+  .res-name { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: .02em; }
+  .res-tagline { font-size: 11px; color: rgba(255,255,255,.38); margin-top: 2px; font-weight: 400; }
+  .res-badge {
+    background: var(--gold); color: #000; font-size: 10px; font-weight: 700;
+    letter-spacing: .04em; padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+    margin-top: 4px; flex-shrink: 0;
+  }
+  .res-body { padding: 1.1rem 1.4rem; }
+  .claim {
+    border-left: 2px solid var(--gold); padding: .65rem .9rem;
+    border-radius: 0 6px 6px 0; background: var(--surface-2); margin-bottom: 1.1rem;
+  }
+  .claim-text { font-size: 13px; font-weight: 600; color: var(--text); }
+  .sec-label {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .09em; color: var(--text-3); margin-bottom: 8px;
+  }
+  .prob-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.1rem; }
+  .prob-item { font-size: 12px; color: var(--text); display: flex; align-items: flex-start; gap: 7px; line-height: 1.4; }
+  .prob-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; }
+  .prob-item strong { font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1.1rem; }
+  .tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); color: var(--text-2); background: var(--surface-2); }
+  .res-link {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500;
+    font-family: 'Inter', sans-serif; color: var(--text); text-decoration: none;
+    border: 1px solid var(--border-2); padding: 7px 14px; border-radius: var(--radius-sm);
+    transition: border-color .15s, background .15s;
+  }
+  .res-link:hover { background: var(--surface-2); }
+
+  /* DEMO CTA */
+  .demo-box {
+    margin-top: 28px;
+    background: var(--dark);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .demo-box-text {}
+  .demo-box-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 4px;
+  }
+  .demo-box-title { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+  .demo-box-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .btn-demo {
+    background: var(--gold); color: #000; border: none;
+    padding: 11px 22px; border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif;
+    cursor: pointer; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 6px; white-space: nowrap; transition: opacity .15s;
+    flex-shrink: 0;
+  }
+  .btn-demo:hover { opacity: .88; }
+
+  .btn-restart {
+    background: none; border: 1px solid var(--border); color: var(--text-2);
+    padding: 9px 18px; border-radius: var(--radius-sm); font-size: 12px;
+    font-family: 'Inter', sans-serif; cursor: pointer; transition: border-color .15s, color .15s;
+  }
+  .btn-restart:hover { border-color: var(--border-2); color: var(--text); }
+
+  @media (max-width: 560px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .hero-title { font-size: 22px; }
+    .main { padding: 1.5rem 1rem 3rem; }
+    .demo-box { flex-direction: column; align-items: flex-start; }
+  }
+</style>
 </head>
 <body>
+<div class="page">
 
-<div id="sf">
-  <div class="sf-inner" id="sf-content"></div>
+  <nav>
+    <div class="nav-logo">VEMAVENTURI</div>
+  </nav>
+
+  <div class="hero">
+    <div class="main" style="padding-top:0;padding-bottom:0">
+      <div class="hero-eyebrow">Solution Finder</div>
+      <div class="hero-title">Which solution fits your construction site?</div>
+      <div class="hero-sub">Select your challenges – we'll recommend the right products.</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="progress" id="prog"></div>
+    <div id="app"></div>
+  </div>
+
 </div>
 
 <script>
-var steps = [
-  {
-    id: 'pain',
-    step: 'Step 1 of 3', pct: 8,
-    eyebrow: 'Find your solution',
-    question: 'What is your biggest challenge on site?',
-    sub: 'Select the area that costs you the most time and resources.',
-    multi: false,
-    cols: 2,
-    options: [
-      { id: 'festigkeit',  icon: '🏗️', title: 'Strength & Curing',    desc: 'Uncertain compressive strength, slow cycles, lab results don\'t match in-situ reality' },
-      { id: 'schalung',    icon: '⚠️', title: 'Formwork Safety',       desc: 'Pressure spikes, blowout risk, tall walls or SCC' },
-      { id: 'qualitaet',   icon: '🔍', title: 'Concrete Quality',      desc: 'Honeycombing, voids, fair-faced concrete, poor surface' },
-      { id: 'frischbeton', icon: '💧', title: 'Fresh Concrete QC',     desc: 'Unclear water content, w/c ratio fluctuates, inconsistent deliveries' }
-    ]
-  },
-  {
-    id: 'context',
-    step: 'Step 2 of 3', pct: 50,
-    eyebrow: 'Project context',
-    question: 'Which conditions apply to your project?',
-    sub: 'Multiple answers possible — select all that apply.',
-    multi: true,
-    cols: 3,
-    options: [
-      { id: 'winter',     icon: '❄️', title: 'Extreme Temperatures', desc: 'Winter concreting or summer heat' },
-      { id: 'highwall',   icon: '🏛️', title: 'High Walls & Columns', desc: 'Over 3m, bridges, tunnels' },
-      { id: 'sichtbeton', icon: '✨', title: 'Architectural Concrete', desc: 'High surface quality, fair-faced' },
-      { id: 'scc',        icon: '🌊', title: 'Self-Compacting (SCC)', desc: 'Special concrete mixes' },
-      { id: 'schnell',    icon: '⚡', title: 'Fast Cycle Times',      desc: 'Early striking, post-tensioning' },
-      { id: 'infra',      icon: '🔧', title: 'Infrastructure',        desc: 'Tunnels, complex geometries' }
-    ]
-  },
-  {
-    id: 'goal',
-    step: 'Step 3 of 3', pct: 80,
-    eyebrow: 'Your priority',
-    question: 'What is your primary goal?',
-    sub: 'This helps us prioritize the best solution for you.',
-    multi: false,
-    cols: 2,
-    options: [
-      { id: 'sicherheit', icon: '🛡️', title: 'Increase Safety',    desc: 'Minimize risk, prevent accidents, maintain compliance' },
-      { id: 'speed',      icon: '🚀', title: 'Build Faster',        desc: 'Shorter cycles, earlier striking, less waiting time' },
-      { id: 'kosten',     icon: '💰', title: 'Reduce Costs',        desc: 'Less rework, fewer lab tests, less waste' },
-      { id: 'qualitaet2', icon: '🏆', title: 'Ensure Quality',      desc: 'Documentation, standards, client satisfaction' }
-    ]
-  }
+const cats=[
+  {id:'q',icon:'ti-layers-difference',title:'Concrete Quality & Defects',sub:'Surfaces, voids, cracks',problems:[
+    {id:'q1',title:'Honeycombing',short:'Voids caused by insufficient compaction',p:'PHONO'},
+    {id:'q2',title:'Air voids & porosity',short:'Reduced density and structural strength',p:'PHONO'},
+    {id:'q3',title:'Architectural concrete defects',short:'Stains, blemishes, uneven surfaces',p:'PHONO'},
+    {id:'q4',title:'Shrinkage cracks & crazing',short:'Micro-cracks from rapid moisture loss at surface',p:'TEMO'},
+    {id:'q5',title:'Thermal cracks',short:'Temperature differential >20 °C between core and surface',p:'TEMO'},
+    {id:'q6',title:'Capillary pores & moisture ingress',short:'High w/c ratio increases frost-thaw damage',p:'SONO'},
+  ]},
+  {id:'w',icon:'ti-cloud-storm',title:'Weather & Site Conditions',sub:'Frost, heat, moisture',problems:[
+    {id:'w1',title:'Winter concreting / frost',short:'Hydration slows or stops due to freezing',p:'TEMO'},
+    {id:'w2',title:'Mass concrete & heat of hydration',short:'Dangerous temperature gradients in large elements',p:'TEMO'},
+    {id:'w3',title:'Hot weather concreting',short:'Shrinkage cracks from rapid evaporation',p:'TEMO'},
+    {id:'w4',title:'Variable aggregate moisture',short:'Uncontrolled w/c ratio deviations',p:'SONO'},
+    {id:'w5',title:'Rain on fresh concrete',short:'Elevated w/c ratio, washed-out surface',p:'SONO'},
+    {id:'w6',title:'SCC-specific risks',short:'Higher fresh concrete pressure, temperature-sensitive',p:'PREMO'},
+  ]},
+  {id:'s',icon:'ti-layout-board',title:'Formwork Safety',sub:'Fresh concrete pressure, blowout',problems:[
+    {id:'s1',title:'Formwork failure / blowout',short:'Fresh concrete pressure exceeds formwork capacity',p:'PREMO'},
+    {id:'s2',title:'Bulging',short:'Permanent deformation from local pressure overload',p:'PREMO'},
+    {id:'s3',title:'Bottom-up pumping / one-sided formwork',short:'Unpredictable pressure peaks during placing',p:'PREMO'},
+    {id:'s4',title:'Tall walls & columns',short:'Hydrostatic pressure hard to calculate without measurement',p:'PREMO'},
+    {id:'s5',title:'Conservative placing speed',short:'Unnecessary time loss without real-time pressure data',p:'PREMO'},
+    {id:'s6',title:'Special formwork (tunnels, bridges)',short:'Complex geometries with hard-to-predict pressure profiles',p:'PREMO'},
+  ]},
+  {id:'z',icon:'ti-clock-play',title:'Time Loss & Efficiency',sub:'Cycle times, stripping, documentation',problems:[
+    {id:'z1',title:'Wrong stripping time',short:'Too early: structural damage – too late: unnecessary delays',p:'TEMO'},
+    {id:'z2',title:'Post-tensioning too early / too late',short:'Cracks due to insufficient in-situ strength',p:'TEMO'},
+    {id:'z3',title:'Conservative lab cube results',short:'Cube strength ≠ actual in-situ strength',p:'TEMO'},
+    {id:'z4',title:'Slow cycle times',short:'Unclear strength development delays climbing systems',p:'TEMO'},
+    {id:'z5',title:'Missing documentation & compliance records',short:'Liability risks and non-conformity issues',p:'TEMO'},
+  ]},
 ];
 
-var products = {
-  TEMO:     { name: 'TEMO',      tag: 'TEMO', tagline: 'Temperature & Maturity Monitoring',            url: 'https://vemaventuri.io/temo-concrete-temperature-and-maturity-monitoring' },
-  TEMOLINK: { name: 'TEMO Link', tag: 'T.LK', tagline: 'Wireless Temperature & Maturity Monitoring',   url: 'https://vemaventuri.io/temo-link-concrete-temperature-and-maturity-monitoring' },
-  LINK:     { name: 'LINK',      tag: 'LINK', tagline: 'Pressure, Temperature & Maturity — all-in-one',url: 'https://vemaventuri.io/link-concrete-pressure-temperature-and-maturity-monitoring' },
-  PREMO:    { name: 'PREMO',     tag: 'PRMO', tagline: 'Real-Time Formwork Pressure Monitoring',        url: 'https://vemaventuri.io/premo-concrete-pressure-monitoring' },
-  PHONO:    { name: 'PHONO',     tag: 'PHNO', tagline: 'Concrete Detection & Compaction Monitoring',    url: 'https://vemaventuri.io/phono-concrete-detection-and-compaction-monitoring' },
-  SONO:     { name: 'SONO Hub',  tag: 'SONO', tagline: 'w/c Ratio Determination at Point of Discharge', url: 'https://vemaventuri.io/sono-water-content-determination-of-fresh-concrete' }
+const prods={
+  TEMO:{claim:'Up to 30% faster stripping with the Maturity Method.',tags:['Temperature monitoring','Maturity monitoring','Stripping optimization'],url:'https://vemaventuri.io/temo-concrete-temperature-and-maturity-monitoring',tagline:'Temperature & Maturity Monitoring'},
+  PREMO:{claim:'Up to 25% faster concrete placing.',tags:['Fresh concrete pressure','Formwork safety','Real-time monitoring'],url:'https://vemaventuri.io/premo-concrete-pressure-monitoring',tagline:'Pressure Monitoring'},
+  PHONO:{claim:'Save costs on expensive rework.',tags:['Compaction monitoring','Concrete detection','Quality assurance'],url:'https://vemaventuri.io/phono-concrete-detection-and-compaction-monitoring',tagline:'Detection & Compaction Monitoring'},
+  SONO:{claim:'Ensure your concrete quality.',tags:['w/c ratio control','Moisture measurement','Fresh concrete analysis'],url:'https://vemaventuri.io/sono-water-content-determination-of-fresh-concrete',tagline:'Water Content Determination'},
 };
 
-function recommend(a) {
-  var pain = a.pain, ctx = a.context || [], goal = a.goal;
-  var pri = [], sec = [];
-  if (pain === 'festigkeit') {
-    if (ctx.indexOf('schnell') > -1 || goal === 'speed') { pri = ['LINK','TEMOLINK']; sec = ['TEMO']; }
-    else if (ctx.indexOf('winter') > -1)                 { pri = ['TEMOLINK','LINK']; sec = ['TEMO']; }
-    else                                                  { pri = ['TEMOLINK','TEMO']; sec = ['LINK']; }
-  } else if (pain === 'schalung') {
-    if (ctx.indexOf('scc') > -1 || ctx.indexOf('highwall') > -1) { pri = ['LINK','PREMO']; }
-    else { pri = ['PREMO']; sec = ['LINK']; }
-  } else if (pain === 'qualitaet') {
-    if (ctx.indexOf('sichtbeton') > -1) { pri = ['PHONO']; sec = ['LINK']; }
-    else { pri = ['PHONO']; sec = ['TEMO']; }
-  } else if (pain === 'frischbeton') {
-    pri = ['SONO']; sec = ['PHONO'];
-  }
-  if (ctx.indexOf('infra') > -1 && pri.indexOf('LINK') === -1 && sec.indexOf('LINK') === -1) sec.unshift('LINK');
-  return { pri: pri, sec: sec };
+let step=1,selCats=new Set(),selProbs=new Set();
+
+function prog(){
+  const labels=['Area','Problem','Solution'];
+  document.getElementById('prog').innerHTML=labels.map((l,i)=>{
+    const n=i+1;
+    let cls='p-step';
+    if(n<step)cls+=' done';
+    else if(n===step)cls+=' active';
+    const num=n<step?'<i class="ti ti-check" style="font-size:11px"></i>':n;
+    return `${i?'<div class="p-line"></div>':''}<div class="${cls}"><span class="p-num">${num}</span>${l}</div>`;
+  }).join('');
 }
 
-var currentStep = 0;
-var answers = {};
-var selections = {};
-
-function getSel(id) { return selections[id] || []; }
-
-function render() {
-  var c = document.getElementById('sf-content');
-  if (currentStep < steps.length) {
-    renderQ(c, steps[currentStep]);
+function render(){
+  prog();
+  const app=document.getElementById('app');
+  if(step===1){
+    app.innerHTML=`
+      <div class="sect-q">What are your biggest challenges on site?</div>
+      <div class="sect-hint"><i class="ti ti-checks"></i> Multiple selection possible</div>
+      <div class="grid2">
+        ${cats.map(c=>`
+          <button class="card${selCats.has(c.id)?' sel':''}" onclick="tog1('${c.id}')">
+            <span class="check-ring"><i class="ti ti-check"></i></span>
+            <div class="card-icon"><i class="ti ${c.icon}"></i></div>
+            <div class="card-title">${c.title}</div>
+            <div class="card-sub">${c.sub}</div>
+          </button>`).join('')}
+      </div>
+      <div class="cta">
+        <button class="btn-primary" onclick="go(2)" ${selCats.size?'':'disabled'}>
+          Next <i class="ti ti-arrow-right"></i>
+        </button>
+        ${selCats.size?`<span class="cta-count">${selCats.size} area${selCats.size>1?'s':''} selected</span>`:''}
+      </div>`;
+  } else if(step===2){
+    const fc=cats.filter(c=>selCats.has(c.id));
+    app.innerHTML=`
+      <button class="back-btn" onclick="go(1)"><i class="ti ti-arrow-left"></i> Back</button>
+      <div class="sect-q">Which specific problems apply to you?</div>
+      <div class="sect-hint"><i class="ti ti-checks"></i> Multiple selection possible</div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        ${fc.map(cat=>`
+          <div>
+            <div class="cat-label"><i class="ti ${cat.icon}"></i>${cat.title}</div>
+            <div class="grid1">
+              ${cat.problems.map(p=>`
+                <button class="card${selProbs.has(p.id)?' sel':''}" onclick="tog2('${p.id}')">
+                  <span class="check-ring"><i class="ti ti-check"></i></span>
+                  <div class="card-title">${p.title}</div>
+                  <div class="card-sub">${p.short}</div>
+                </button>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="cta" style="margin-top:18px">
+        <button class="btn-primary" onclick="go(3)" ${selProbs.size?'':'disabled'}>
+          Show solution <i class="ti ti-arrow-right"></i>
+        </button>
+        ${selProbs.size?`<span class="cta-count">${selProbs.size} problem${selProbs.size>1?'s':''} selected</span>`:''}
+      </div>`;
   } else {
-    renderResult(c);
+    const map={};
+    cats.forEach(c=>c.problems.forEach(p=>{
+      if(selProbs.has(p.id)){
+        if(!map[p.p])map[p.p]=[];
+        map[p.p].push(p);
+      }
+    }));
+    const keys=Object.keys(map);
+    app.innerHTML=`
+      <button class="back-btn" onclick="go(2)"><i class="ti ti-arrow-left"></i> Back</button>
+      <div class="sect-q" style="margin-bottom:14px">Your recommendation${keys.length>1?'s':''} — ${keys.length} product${keys.length>1?'s':''}</div>
+      <div class="results">
+        ${keys.map(k=>{
+          const pr=prods[k],ps=map[k];
+          return `<div class="res-card">
+            <div class="res-head">
+              <div>
+                <div class="res-name">${k}</div>
+                <div class="res-tagline">${pr.tagline}</div>
+              </div>
+              <span class="res-badge">${ps.length} problem${ps.length>1?'s':''} solved</span>
+            </div>
+            <div class="res-body">
+              <div class="claim"><div class="claim-text">${pr.claim}</div></div>
+              <div class="sec-label">Problems addressed</div>
+              <div class="prob-list">
+                ${ps.map(p=>`
+                  <div class="prob-item">
+                    <div class="prob-dot"></div>
+                    <span><strong>${p.title}</strong> — ${p.short}</span>
+                  </div>`).join('')}
+              </div>
+              <div class="tags">${pr.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+              <a class="res-link" href="${pr.url}" target="_blank">
+                Learn more <i class="ti ti-arrow-right" style="font-size:11px"></i>
+              </a>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="demo-box">
+        <div class="demo-box-text">
+          <div class="demo-box-eyebrow">Ready to get started?</div>
+          <div class="demo-box-title">See it live on your construction site.</div>
+          <div class="demo-box-sub">Book a free demo – our experts will walk you through the right setup.</div>
+        </div>
+        <a class="btn-demo" href="https://vemaventuri.io/schedule-a-demo" target="_blank">
+          Book a demo <i class="ti ti-calendar"></i>
+        </a>
+      </div>
+      <div class="cta" style="margin-top:14px">
+        <button class="btn-restart" onclick="reset()">Start over</button>
+      </div>`;
   }
 }
 
-function renderQ(c, s) {
-  var selected = getSel(s.id);
-  var hasSelection = selected.length > 0;
-  var colClass = s.cols === 3 ? 'sf-options cols3' : 'sf-options';
-
-  var optionsHTML = '';
-  for (var i = 0; i < s.options.length; i++) {
-    var o = s.options[i];
-    var isSelected = selected.indexOf(o.id) > -1;
-    optionsHTML += '<button class="sf-option' + (isSelected ? ' selected' : '') + '" onclick="pick(\'' + s.id + '\',\'' + o.id + '\',' + s.multi + ')">' +
-      '<div class="sf-opt-check">' +
-        '<svg class="sf-opt-check-mark" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-      '</div>' +
-      '<span class="sf-opt-icon">' + o.icon + '</span>' +
-      '<div class="sf-opt-title">' + o.title + '</div>' +
-      '<div class="sf-opt-desc">' + o.desc + '</div>' +
-    '</button>';
-  }
-
-  var backBtn = currentStep > 0 ? '<button class="sf-btn-back" onclick="goBack()">← Back</button>' : '';
-  var nextLabel = currentStep < steps.length - 1 ? 'Continue →' : 'Show my solutions →';
-
-  c.innerHTML =
-    '<div class="sf-screen">' +
-      '<div class="sf-header">' +
-        '<div class="sf-logo-area">' +
-          '<div class="sf-logo-wordmark">' +
-            '<svg class="sf-diamond" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,12 12,22 2,12" fill="#0a0a0a"/><polygon points="12,6 18,12 12,18 6,12" fill="#F5C400"/></svg>' +
-            '<span class="sf-brand-name">Vemaventuri</span>' +
-          '</div>' +
-          '<div class="sf-brand-sub">Solution Finder · A PERI Company</div>' +
-        '</div>' +
-        '<div class="sf-step-badge">' + s.step + '</div>' +
-      '</div>' +
-      '<div class="sf-progress-wrap">' +
-        '<div class="sf-progress-track"><div class="sf-progress-fill" style="width:' + s.pct + '%"></div></div>' +
-        '<div class="sf-progress-label">' +
-          '<span class="sf-progress-text">Finding your solution</span>' +
-          '<span class="sf-progress-text">' + s.pct + '%</span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="sf-eyebrow">' + s.eyebrow + '</div>' +
-      '<div class="sf-question">' + s.question + '</div>' +
-      '<div class="sf-question-sub">' + s.sub + '</div>' +
-      '<div class="' + colClass + '">' + optionsHTML + '</div>' +
-      '<div class="sf-nav">' +
-        backBtn +
-        '<button class="sf-btn-next' + (hasSelection ? ' active' : '') + '" onclick="goNext()">' + nextLabel + '</button>' +
-      '</div>' +
-    '</div>';
-}
-
-function renderResult(c) {
-  var recs = recommend(answers);
-  var painLabel = '';
-  for (var i = 0; i < steps[0].options.length; i++) {
-    if (steps[0].options[i].id === answers.pain) { painLabel = steps[0].options[i].title; break; }
-  }
-  var ctxLabels = [];
-  var ctx = answers.context || [];
-  for (var j = 0; j < steps[1].options.length; j++) {
-    if (ctx.indexOf(steps[1].options[j].id) > -1) ctxLabels.push(steps[1].options[j].title);
-  }
-  var goalLabel = '';
-  for (var k = 0; k < steps[2].options.length; k++) {
-    if (steps[2].options[k].id === answers.goal) { goalLabel = steps[2].options[k].title; break; }
-  }
-
-  var allProds = [];
-  for (var pi = 0; pi < recs.pri.length; pi++) allProds.push({ key: recs.pri[pi], primary: true });
-  for (var si = 0; si < recs.sec.length; si++) allProds.push({ key: recs.sec[si], primary: false });
-
-  var tagsHTML = '';
-  if (painLabel) tagsHTML += '<span class="sf-tag hl">' + painLabel + '</span>';
-  for (var ti = 0; ti < ctxLabels.length; ti++) tagsHTML += '<span class="sf-tag">' + ctxLabels[ti] + '</span>';
-  if (goalLabel) tagsHTML += '<span class="sf-tag">' + goalLabel + '</span>';
-
-  var prodsHTML = '';
-  for (var ai = 0; ai < allProds.length; ai++) {
-    var pd = products[allProds[ai].key];
-    var isPri = allProds[ai].primary;
-    prodsHTML +=
-      '<a class="sf-product' + (isPri ? ' primary' : '') + '" href="' + pd.url + '" target="_blank">' +
-        '<div class="sf-badge">' + pd.tag + '</div>' +
-        '<div class="sf-prod-info">' +
-          '<div class="sf-prod-header">' +
-            '<div class="sf-prod-name">' + pd.name + '</div>' +
-            (isPri ? '<span class="sf-rec-pill">Recommended</span>' : '') +
-          '</div>' +
-          '<div class="sf-prod-tagline">' + pd.tagline + '</div>' +
-        '</div>' +
-        '<div class="sf-prod-arrow">→</div>' +
-      '</a>';
-  }
-
-  c.innerHTML =
-    '<div class="sf-screen">' +
-      '<div class="sf-header">' +
-        '<div class="sf-logo-area">' +
-          '<div class="sf-logo-wordmark">' +
-            '<svg class="sf-diamond" viewBox="0 0 24 24" fill="none"><polygon points="12,2 22,12 12,22 2,12" fill="#0a0a0a"/><polygon points="12,6 18,12 12,18 6,12" fill="#F5C400"/></svg>' +
-            '<span class="sf-brand-name">Vemaventuri</span>' +
-          '</div>' +
-          '<div class="sf-brand-sub">Solution Finder · A PERI Company</div>' +
-        '</div>' +
-        '<div class="sf-step-badge">✓ Done</div>' +
-      '</div>' +
-      '<div class="sf-progress-wrap">' +
-        '<div class="sf-progress-track"><div class="sf-progress-fill" style="width:100%"></div></div>' +
-        '<div class="sf-progress-label">' +
-          '<span class="sf-progress-text">Solution found</span>' +
-          '<span class="sf-progress-text">100%</span>' +
-        '</div>' +
-      '</div>' +
-      '<div class="sf-result-kicker">✓ Your recommendation</div>' +
-      '<div class="sf-result-title">Matching Solutions for Your Project</div>' +
-      '<div class="sf-result-sub">Based on your answers, we recommend the following sensor solutions. Click any product to learn more.</div>' +
-      '<div class="sf-tags">' + tagsHTML + '</div>' +
-      '<div class="sf-products">' + prodsHTML + '</div>' +
-      '<div class="sf-divider"></div>' +
-      '<div class="sf-cta">' +
-        '<button class="sf-btn-demo" onclick="window.open(\'https://vemaventuri.io/schedule-a-demo\',\'_blank\')">Book a Free Demo</button>' +
-        '<button class="sf-btn-restart" onclick="restart()">↺ Start over</button>' +
-      '</div>' +
-    '</div>';
-}
-
-function pick(stepId, optId, multi) {
-  if (!selections[stepId]) selections[stepId] = [];
-  var idx = selections[stepId].indexOf(optId);
-  if (multi) {
-    if (idx > -1) selections[stepId].splice(idx, 1);
-    else selections[stepId].push(optId);
-  } else {
-    selections[stepId] = [optId];
-  }
-  render();
-}
-
-function goNext() {
-  var s = steps[currentStep];
-  var sel = getSel(s.id);
-  if (!sel.length) return;
-  answers[s.id] = s.multi ? sel : sel[0];
-  currentStep++;
-  render();
-}
-
-function goBack() {
-  if (currentStep > 0) { currentStep--; render(); }
-}
-
-function restart() {
-  currentStep = 0; answers = {}; selections = {};
-  render();
-}
-
+function tog1(id){selCats.has(id)?selCats.delete(id):selCats.add(id);render();}
+function tog2(id){selProbs.has(id)?selProbs.delete(id):selProbs.add(id);render();}
+function go(n){step=n;render();}
+function reset(){step=1;selCats=new Set();selProbs=new Set();render();}
 render();
 </script>
-
 </body>
 </html>
